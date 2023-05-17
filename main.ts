@@ -30,6 +30,7 @@ function plot_sine_cosine_graph () {
             OLED12864_I2C.pixel(Math.constrain(x, 0, 123), Math.constrain(y_cosine, 0, 63), 1)
         }
         OLED12864_I2C.draw()
+        basic.pause(2000)
     }
 }
 function zoomtrue_demo () {
@@ -55,8 +56,8 @@ function zoomtrue_demo () {
     31,
     1
     )
-    OLED12864_I2C.clear()
     basic.pause(2000)
+    OLED12864_I2C.clear()
     OLED12864_I2C.zoom(true)
     for (let index2 = 0; index2 <= 7; index2++) {
         OLED12864_I2C.rect(
