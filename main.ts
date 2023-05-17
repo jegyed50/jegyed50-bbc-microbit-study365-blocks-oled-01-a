@@ -7,9 +7,21 @@ input.onButtonPressed(Button.A, function () {
     basic.pause(3000)
     OLED12864_I2C.off()
 })
-input.onButtonPressed(Button.AB, function () {
-    OLED12864_I2C.invert(true)
-    basic.pause(2000)
+input.onButtonPressed(Button.B, function () {
+    pidiv180 = 1.7453292519943295e+30
+    OLED12864_I2C.clear()
+    OLED12864_I2C.pixel(x, y, 1)
+    OLED12864_I2C.draw()
+    for (let index = 0; index <= 365; index++) {
+        x = Math.round(Math.map(index, 0, 365, 0, 123))
+        y = Math.sin(x * pidiv180)
+        serial.writeValue("yA", y)
+        y = Math.round(Math.map(Math.sin(x * pidiv180), -1, 1, 0, 63))
+        serial.writeValue("x", x)
+        serial.writeValue("y", y)
+        OLED12864_I2C.pixel(x, y, 1)
+    }
+    OLED12864_I2C.draw()
 })
 function zoomtrue_demo () {
     basic.pause(2000)
@@ -72,17 +84,20 @@ function zoomfalse_demo () {
     )
     OLED12864_I2C.clear()
     basic.pause(2000)
-    for (let index = 0; index <= 15; index++) {
+    for (let index3 = 0; index3 <= 15; index3++) {
         OLED12864_I2C.rect(
-        index * 2,
-        index * 2,
-        127 - index * 2,
-        63 - index * 2,
+        index3 * 2,
+        index3 * 2,
+        127 - index3 * 2,
+        63 - index3 * 2,
         1
         )
     }
     basic.pause(2000)
 }
+let y = 0
+let x = 0
+let pidiv180 = 0
 // OLED12864_I2C Extension
 // G   V   SCL   SDA
 // GND 5V   P19   P20
@@ -103,11 +118,7 @@ function zoomfalse_demo () {
 // Only ASCII characters chr(0) to chr(127)
 OLED12864_I2C.init(60)
 OLED12864_I2C.zoom(false)
+OLED12864_I2C.pixel(63, 31, 1)
 music.playTone(262, music.beat(BeatFraction.Eighth))
-for (let grade = 0; grade <= 365; grade++) {
-    OLED12864_I2C.pixel(Math.round(grade / (360 / 128)), 31, 1)
-    serial.writeValue("fok", grade)
-    serial.writeValue("fok", grade)
-}
-music.playTone(262, music.beat(BeatFraction.Eighth))
+music.playTone(988, music.beat(BeatFraction.Eighth))
 basic.pause(5000)
